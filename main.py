@@ -21,7 +21,8 @@ with requests.session() as c:
 	# Parse order history HTML to grab latest order date
 	soup = BeautifulSoup(request.text)
 	last_order_date = soup.find_all('td', class_='first date')[0].strong.text
-	
+
+	# Grab today's date in the same format Seamless uses so you can compare
 	today = '{dt.month}/{dt.day}/{dt.year}'.format(dt=datetime.datetime.now())
 
 	if last_order_date != today:
