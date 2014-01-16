@@ -1,9 +1,9 @@
 import datetime
-
+# ---
 import creds
-
-import requests
+# ---
 from bs4 import BeautifulSoup
+import requests
 
 payload = {
 	'username': creds.username,
@@ -18,7 +18,7 @@ with requests.session() as c:
 	# Grab order history
 	request = c.get('https://www.seamless.com/OrderHistory.m?vendorType=1')
 
-	# Parse order history HTML to grab latest order date
+	# Parse order history HTML to grab last order date
 	soup = BeautifulSoup(request.text)
 	last_order_date = soup.find_all('td', class_='first date')[0].strong.text
 
