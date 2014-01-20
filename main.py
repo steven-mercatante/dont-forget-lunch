@@ -3,15 +3,9 @@ import importlib
 import sys
 # --
 import creds
-# import notifiers
 # --
 from bs4 import BeautifulSoup
 import requests
-
-payload = {
-	'username': creds.username,
-	'password': creds.password
-}
 
 active_notifiers = [
 	'Growl',
@@ -20,7 +14,10 @@ active_notifiers = [
 # Create a connection
 with requests.session() as c:
 	# Login
-	c.post('https://www.seamless.com/food-delivery/login.m', data=payload)
+	c.post('https://www.seamless.com/food-delivery/login.m', data={
+		'username': creds.username,
+		'password': creds.password
+	})
 
 	# Grab order history
 	request = c.get('https://www.seamless.com/OrderHistory.m?vendorType=1')
@@ -29,7 +26,6 @@ with requests.session() as c:
 	soup = BeautifulSoup(request.text)
 	try:
 		last_order_date = soup.find_all('td', class_='first date')[0].strong.text
-		print last_order_date
 	except Exception as e:
 		# If last_order_date couldn't be grabbed, it's likely that the login 
 		# process didn't work - double check your credentials!
@@ -47,4 +43,4 @@ with requests.session() as c:
 				n = class_()
 				n.notify()
 			except Exception as e:
-				print e
+				pass
