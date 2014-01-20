@@ -1,15 +1,19 @@
 # Each notifier class should have a notify() method
 
+import gntp.notifier
+
 class Growl():
-	def __init__(self):
-		print 'growl init'
-
 	def notify(self):
-		print 'notify:growl'
+		growl = gntp.notifier.GrowlNotifier(
+			applicationName="Don't Forget Lunch!",
+			notifications=['reminder']
+		)
 
-class Email():
-	def __init__(self):
-		print 'email init'
+		growl.register()
 
-	def notify(self):
-		print 'notify:email'
+		growl.notify(
+			noteType='reminder',
+			title="Don't Forget Lunch!",
+			description="Looks like you haven't ordered lunch yet... better hurry!"
+		)
+

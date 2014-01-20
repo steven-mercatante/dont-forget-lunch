@@ -1,4 +1,5 @@
 import datetime
+import importlib
 import sys
 # --
 import creds
@@ -14,7 +15,6 @@ payload = {
 
 active_notifiers = [
 	'Growl',
-	'Email'
 ]
 
 # Create a connection
@@ -36,8 +36,11 @@ with requests.session() as c:
 
 	if last_order_date != today:
 		# Nofify
-		notifiers_mod = __import__('notifiers')
+		notifiers_mod = importlib.import_module('notifiers')
 		for notifier in active_notifiers:
-			class_ = getattr(notifiers_mod, notifier)
-			n = class_()
-			n.notify()
+			try:
+				class_ = getattr(notifiers_mod, notifier)
+				n = class_()
+				n.notify()
+			except Exception as e:
+				print e
